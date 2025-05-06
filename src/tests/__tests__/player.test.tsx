@@ -19,13 +19,9 @@ const componentUnderTest = (
 );
 
 describe("player component renders correctly", () => {
-  let rerenderComponent: (newProps?: React.ReactElement) => void;
-
   // added so that state changes can be checked
   beforeEach(() => {
-    const { rerender } = render(componentUnderTest);
-    // make rerender avaiable outside the beforeEach
-    rerenderComponent = rerender;
+    render(componentUnderTest);
   });
 
   test("player component shoulld render with default values", () => {
