@@ -1,25 +1,36 @@
-type GameBoardSymbol = "X" | "O" | null;
+import type { Turns } from "../types/game";
+import { initialBoardState } from "../Utils/GameBoardUtils";
 
-type gameBoardMatrix = [
-  [GameBoardSymbol, GameBoardSymbol, GameBoardSymbol],
-  [GameBoardSymbol, GameBoardSymbol, GameBoardSymbol],
-  [GameBoardSymbol, GameBoardSymbol, GameBoardSymbol],
-];
+// Define the expected props for the GameBoard component
+// Ensures type safety and clarity when using the component, helping to avoid type errors
 
-const initialBoardState: gameBoardMatrix = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null],
-];
+type GameBoardProps = {
+  turns: Turns[];
+  handleTurn: (rowIndex: number, colIndex: number) => void;
+};
 
-const GameBoard = () => {
+const GameBoard = ({ turns, handleTurn }: GameBoardProps) => {
+  let gameBoard = [...initialBoardState];
+
+  for (const turn of turns) {
+    const { square, player }: Turns = turn;
+    const { rowIndex, colIndex } = square;
+    gameBoard[rowIndex][colIndex] = player;
+  }
+
   return (
     <ol id="game-board">
-      {initialBoardState.map((row, rowindex) => (
-        <ol key={rowindex}>
-          {row.map((symbol, colindex) => (
-            <li key={colindex}>
-              <button>{symbol}</button>
+      {gameBoard.map((row, rowIndex) => (
+        <ol key={rowIndex}>
+          {row.map((symbol, colIndex) => (
+            <li key={colIndex}>
+              <button
+                onClick={() => {
+                  handleTurn(rowIndex, colIndex);
+                }}
+              >
+                {symbol}
+              </button>
             </li>
           ))}
         </ol>
