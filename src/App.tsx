@@ -1,6 +1,9 @@
 import { useState } from "react";
 import Header from "./components/Header";
 import Player from "./components/Player";
+import GameBoard from "./components/GameBoard";
+import type { Turns } from "./types/game";
+import { initialBoardState } from "./Utils/GameBoardUtils";
 
 const players = {
   X: "Player 1",
@@ -8,8 +11,10 @@ const players = {
 };
 
 const App = () => {
+  let gameBoard = initialBoardState;
   const [playersName, setPlayersName] = useState(players);
-
+  const [currentPlayer, setCurrenttPlayer] = useState<"X" | "O">("X");
+  const [turns, setTurns] = useState<Turns[]>([]);
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     symbol: "X" | "O"
@@ -21,8 +26,21 @@ const App = () => {
       [symbol]: newInput,
     }));
   };
-  // for test purposes only we sort correct logic when game board is complete
-  let currentPlayer = "X";
+  const handleTurn = (rowIndex: number, colIndex: number) => {
+    if (gameBoard[rowIndex][colIndex] !== null) {
+      return;
+    }
+    setTurns((prev) => [
+      { square: { rowIndex, colIndex }, player: currentPlayer },
+      ...prev,
+    ]);
+    console.log(turns);
+    switchPlayer();
+  };
+  const switchPlayer = () => {
+    currentPlayer === "X" ? setCurrenttPlayer("O") : setCurrenttPlayer("X");
+  };
+
   return (
     <main>
       <Header />
@@ -41,6 +59,7 @@ const App = () => {
             isActive={currentPlayer === "O"}
           />
         </ol>
+        <GameBoard turns={turns} handleTurn={handleTurn} />
       </div>
     </main>
   );
