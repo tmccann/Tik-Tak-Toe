@@ -1,15 +1,15 @@
 import { screen, render } from "@testing-library/react";
 import GameBoard from "../../components/GameBoard";
-import type { Turns } from "../../types/game";
 import userEvent from "@testing-library/user-event";
+import { deriveGameBoard } from "../../Utils/GameBoardUtils";
 
 const mockHandleTurn = vi.fn();
 const user = userEvent.setup();
 describe("gameBoard component tests", () => {
   beforeEach(() => {
     // turns bust be defined in each describe block to avoid all test using same values
-    let turns: Turns[] = [];
-    render(<GameBoard turns={turns} handleTurn={mockHandleTurn} />);
+    let mockBoard = deriveGameBoard([]);
+    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} />);
   });
 
   test("component renders with blank gameboard containing 9 buttons", () => {
@@ -29,11 +29,12 @@ describe("gameBoard component tests", () => {
 
 describe("game board populate correctly", () => {
   // turns bust be defined in each describe block to avoid all test using same values
-  let turns: Turns[] = [];
 
   beforeEach(() => {
-    turns = [{ square: { rowIndex: 0, colIndex: 0 }, player: "X" }];
-    render(<GameBoard turns={turns} handleTurn={mockHandleTurn} />);
+    let mockBoard = deriveGameBoard([
+      { square: { rowIndex: 0, colIndex: 0 }, player: "X" },
+    ]);
+    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} />);
   });
   test("gameboard populates with correct symbol", () => {
     const buttons = screen.getAllByRole("button");

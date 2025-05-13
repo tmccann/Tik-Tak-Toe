@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import type { Turns } from "./types/game";
-import { initialBoardState } from "./Utils/GameBoardUtils";
+import { deriveGameBoard } from "./Utils/GameBoardUtils";
 
 const players = {
   X: "Player 1",
@@ -11,10 +11,12 @@ const players = {
 };
 
 const App = () => {
-  let gameBoard = initialBoardState;
   const [playersName, setPlayersName] = useState(players);
   const [currentPlayer, setCurrenttPlayer] = useState<"X" | "O">("X");
   const [turns, setTurns] = useState<Turns[]>([]);
+
+  const board = deriveGameBoard(turns);
+
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     symbol: "X" | "O"
@@ -27,14 +29,14 @@ const App = () => {
     }));
   };
   const handleTurn = (rowIndex: number, colIndex: number) => {
-    if (gameBoard[rowIndex][colIndex] !== null) {
+    if (board[rowIndex][colIndex] !== null) {
       return;
     }
     setTurns((prev) => [
       { square: { rowIndex, colIndex }, player: currentPlayer },
       ...prev,
     ]);
-    console.log(turns);
+
     switchPlayer();
   };
   const switchPlayer = () => {
@@ -59,7 +61,7 @@ const App = () => {
             isActive={currentPlayer === "O"}
           />
         </ol>
-        <GameBoard turns={turns} handleTurn={handleTurn} />
+        <GameBoard handleTurn={handleTurn} board={board} />
       </div>
     </main>
   );
