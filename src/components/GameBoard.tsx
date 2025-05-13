@@ -1,26 +1,17 @@
-import type { Turns } from "../types/game";
-import { initialBoardState } from "../Utils/GameBoardUtils";
+import { gameBoardMatrix } from "../types/game";
 
 // Define the expected props for the GameBoard component
 // Ensures type safety and clarity when using the component, helping to avoid type errors
 
 type GameBoardProps = {
-  turns: Turns[];
+  board: gameBoardMatrix;
   handleTurn: (rowIndex: number, colIndex: number) => void;
 };
 
-const GameBoard = ({ turns, handleTurn }: GameBoardProps) => {
-  let gameBoard = [...initialBoardState];
-
-  for (const turn of turns) {
-    const { square, player }: Turns = turn;
-    const { rowIndex, colIndex } = square;
-    gameBoard[rowIndex][colIndex] = player;
-  }
-
+const GameBoard = ({ handleTurn, board }: GameBoardProps) => {
   return (
     <ol id="game-board">
-      {gameBoard.map((row, rowIndex) => (
+      {board.map((row, rowIndex) => (
         <ol key={rowIndex}>
           {row.map((symbol, colIndex) => (
             <li key={colIndex}>
