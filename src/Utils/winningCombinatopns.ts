@@ -1,4 +1,9 @@
-export const WINNING_COMBINATIONS = [
+export type Coordinate = {
+  row: number;
+  column: number;
+};
+
+export const WINNING_COMBINATIONS: Coordinate[][] = [
   [
     { row: 0, column: 0 },
     { row: 0, column: 1 },
