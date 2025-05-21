@@ -3,7 +3,7 @@ import Header from "./components/Header";
 import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import type { Turns } from "./types/game";
-import { deriveGameBoard } from "./Utils/GameBoardUtils";
+import { deriveGameBoard, deriveWinner } from "./Utils/GameBoardUtils";
 
 const players = {
   X: "Player 1",
@@ -16,6 +16,10 @@ const App = () => {
   const [turns, setTurns] = useState<Turns[]>([]);
 
   const board = deriveGameBoard(turns);
+
+  let winner = deriveWinner(board);
+  const draw = !winner && turns.length === 9;
+  console.log(draw);
 
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
