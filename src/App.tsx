@@ -21,7 +21,6 @@ const App = () => {
   let winner = deriveWinner(board);
 
   const draw = !winner && turns.length === 9;
-  console.log(draw);
 
   const handleNameChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -73,7 +72,7 @@ const App = () => {
         </ol>
         {(winner || draw) && (
           <GameOver
-            winner={winner ? players[winner] : undefined}
+            winner={winner ? playersName[winner] : undefined}
             onRestart={onRestart}
           />
         )}

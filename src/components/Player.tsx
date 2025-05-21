@@ -30,7 +30,7 @@ const Player = ({
     <input
       value={playerName}
       autoFocus
-      name={playerName}
+      name={`${playerName}`}
       onChange={(e) => handleNameChange(e, symbol)}
     />
   );
@@ -40,7 +40,10 @@ const Player = ({
       <span className="player">
         {player}
         <span className="player-symbol">{symbol}</span>
-        <button onClick={() => handleEdit()}>
+        <button
+          data-testid={`playerNameButton-${symbol}`}
+          onClick={() => handleEdit()}
+        >
           {isEditing ? "Save" : "Edit"}
         </button>
       </span>
