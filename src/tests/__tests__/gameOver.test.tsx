@@ -17,7 +17,8 @@ describe("winner name is displayeds", () => {
   });
   test("mockRestart is called when restart clicked ", async () => {
     render(<GameOver winner={undefined} onRestart={mockRestart} />);
-    screen.debug();
-    screen.getByRole("button", { name: /rematch/i });
+    const restartButton = screen.getByRole("button", { name: /rematch/i });
+    await user.click(restartButton);
+    expect(mockRestart).toHaveBeenCalled();
   });
 });
