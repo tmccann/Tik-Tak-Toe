@@ -4,6 +4,7 @@ import Player from "./components/Player";
 import GameBoard from "./components/GameBoard";
 import type { Turns } from "./types/game";
 import { deriveGameBoard, deriveWinner } from "./Utils/GameBoardUtils";
+import GameOver from "./components/GameOver";
 
 const players = {
   X: "Player 1",
@@ -18,6 +19,7 @@ const App = () => {
   const board = deriveGameBoard(turns);
 
   let winner = deriveWinner(board);
+
   const draw = !winner && turns.length === 9;
   console.log(draw);
 
@@ -47,6 +49,10 @@ const App = () => {
     currentPlayer === "X" ? setCurrenttPlayer("O") : setCurrenttPlayer("X");
   };
 
+  const onRestart = () => {
+    setTurns([]);
+  };
+
   return (
     <main>
       <Header />
@@ -65,6 +71,12 @@ const App = () => {
             isActive={currentPlayer === "O"}
           />
         </ol>
+        {(winner || draw) && (
+          <GameOver
+            winner={winner ? players[winner] : undefined}
+            onRestart={onRestart}
+          />
+        )}
         <GameBoard handleTurn={handleTurn} board={board} />
       </div>
     </main>
