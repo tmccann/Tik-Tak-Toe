@@ -2,12 +2,14 @@ import { screen, render } from "@testing-library/react";
 import GameBoard from "../../components/GameBoard";
 import userEvent from "@testing-library/user-event";
 import { deriveGameBoard } from "../../Utils/GameBoardUtils";
+import type { UserEvent } from "@testing-library/user-event";
 
 const mockHandleTurn = vi.fn();
-const user = userEvent.setup();
+let user: UserEvent;
 describe("gameBoard component tests", () => {
   beforeEach(() => {
     // turns bust be defined in each describe block to avoid all test using same values
+    user = userEvent.setup();
     let mockBoard = deriveGameBoard([]);
     render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} />);
   });

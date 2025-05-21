@@ -1,13 +1,14 @@
 import { render, screen } from "@testing-library/react";
-import { userEvent } from "@testing-library/user-event";
+import userEvent from "@testing-library/user-event";
 import Player from "../../components/Player";
 import PlayerWrapper from "../testWrappers/PlayerWrapper";
-const user = userEvent.setup();
+import type { UserEvent } from "@testing-library/user-event";
+
 let mockPlayers = {
   X: "Player 1",
   O: "Player 2",
 };
-
+let user: UserEvent;
 const mockNameChange = vi.fn();
 const componentUnderTest = (
   <Player
@@ -20,7 +21,9 @@ const componentUnderTest = (
 
 describe("player component renders correctly", () => {
   // added so that state changes can be checked
+
   beforeEach(() => {
+    user = userEvent.setup();
     render(componentUnderTest);
   });
 
@@ -68,7 +71,6 @@ describe("player element class", () => {
         isActive={false}
       />
     );
-    screen.debug();
     const playerElement = screen.getByRole("listitem");
     expect(playerElement).not.toHaveClass("active");
   });
@@ -78,6 +80,7 @@ describe("Player input interactions (with wrapper)", async () => {
   const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
 
   beforeEach(() => {
+    user = userEvent.setup();
     alertMock;
     render(<PlayerWrapper />);
   });

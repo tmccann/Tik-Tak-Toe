@@ -16,6 +16,7 @@ const GameBoard = ({ handleTurn, board }: GameBoardProps) => {
           {row.map((symbol, colIndex) => (
             <li key={colIndex}>
               <button
+                data-testid="square"
                 onClick={() => {
                   handleTurn(rowIndex, colIndex);
                 }}

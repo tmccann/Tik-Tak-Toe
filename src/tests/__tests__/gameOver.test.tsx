@@ -1,10 +1,11 @@
 import { screen, render } from "@testing-library/react";
 import GameOver from "../../components/GameOver";
 import userEvent from "@testing-library/user-event";
-
+import type { UserEvent } from "@testing-library/user-event";
+let user: UserEvent;
 describe("winner name is displayeds", () => {
   const mockRestart = vi.fn();
-  const user = userEvent.setup();
+  user = userEvent.setup();
   test("winner is display if player symbol received", () => {
     render(<GameOver winner="Player 1" onRestart={mockRestart} />);
     const winner = screen.getByText(/Player 1 won!/i);
