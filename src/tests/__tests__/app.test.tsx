@@ -1,7 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "../../App";
-import type { UserEvent } from "@testing-library/user-event";
 
 test("complete game flow: rename, play, win, draw, reset", async () => {
   const user = userEvent.setup();
@@ -10,12 +9,14 @@ test("complete game flow: rename, play, win, draw, reset", async () => {
   // -----------------------------
   // Step 1: Rename the players
   // -----------------------------
+
   await user.click(screen.getByTestId("playerNameButton-X"));
   let input = screen.getByRole("textbox");
   await user.clear(input);
+  await user.click(screen.getByRole("button", { name: "Save" }));
+  expect(screen.getByText("Player name can not be blank")).toBeInTheDocument();
   await user.type(input, "Alfie");
   await user.click(screen.getByRole("button", { name: "Save" }));
-
   await user.click(screen.getByTestId("playerNameButton-O"));
   input = screen.getByRole("textbox");
   await user.clear(input);
