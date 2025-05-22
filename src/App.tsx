@@ -15,6 +15,8 @@ const App = () => {
   const [playersName, setPlayersName] = useState(players);
   const [currentPlayer, setCurrenttPlayer] = useState<"X" | "O">("X");
   const [turns, setTurns] = useState<Turns[]>([]);
+  const [playerNameError, setPlayersNameError] = useState({ X: "", O: "" });
+  const [isValid, setIsValid] = useState(true);
 
   const board = deriveGameBoard(turns);
 
@@ -27,11 +29,26 @@ const App = () => {
     symbol: "X" | "O"
   ) => {
     const newInput = e.target.value;
+    const trimmed = newInput.trim();
+    const otherSymbol = symbol === "X" ? "O" : "X";
 
-    setPlayersName((prev) => ({
-      ...prev,
-      [symbol]: newInput,
-    }));
+    setPlayersName((prev) => ({ ...prev, [symbol]: newInput }));
+    if (!trimmed) {
+      setPlayersNameError((prev) => ({
+        ...prev,
+        [symbol]: "Player name can not be blank",
+      }));
+      setIsValid(false);
+    } else if (trimmed === playersName[otherSymbol].trim()) {
+      setPlayersNameError((prev) => ({
+        ...prev,
+        [symbol]: "Player name must be unique",
+      }));
+      setIsValid(false);
+    } else {
+      setPlayersNameError((prev) => ({ ...prev, [symbol]: "" }));
+      setIsValid(true);
+    }
   };
   const handleTurn = (rowIndex: number, colIndex: number) => {
     if (board[rowIndex][colIndex] !== null) {
@@ -61,12 +78,14 @@ const App = () => {
             playerName={playersName.X}
             symbol="X"
             handleNameChange={handleNameChange}
+            playerNameError={playerNameError.X}
             isActive={currentPlayer === "X"}
           />
           <Player
             playerName={playersName.O}
             symbol="O"
             handleNameChange={handleNameChange}
+            playerNameError={playerNameError.O}
             isActive={currentPlayer === "O"}
           />
         </ol>
@@ -76,7 +95,7 @@ const App = () => {
             onRestart={onRestart}
           />
         )}
-        <GameBoard handleTurn={handleTurn} board={board} />
+        <GameBoard handleTurn={handleTurn} board={board} isValid={isValid} />
       </div>
     </main>
   );

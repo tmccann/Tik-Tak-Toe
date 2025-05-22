@@ -15,6 +15,7 @@ const componentUnderTest = (
     playerName={mockPlayers.X}
     symbol="X"
     handleNameChange={mockNameChange}
+    playerNameError=""
     isActive
   />
 );
@@ -56,6 +57,7 @@ describe("player element class", () => {
         playerName={mockPlayers.X}
         symbol="X"
         handleNameChange={mockNameChange}
+        playerNameError=""
         isActive={true}
       />
     );
@@ -68,6 +70,7 @@ describe("player element class", () => {
         playerName={mockPlayers.O}
         symbol="O"
         handleNameChange={mockNameChange}
+        playerNameError=""
         isActive={false}
       />
     );
@@ -77,36 +80,40 @@ describe("player element class", () => {
 });
 // wrapper used to simulate state changes
 describe("Player input interactions (with wrapper)", async () => {
-  const alertMock = vi.spyOn(window, "alert").mockImplementation(() => {});
-
   beforeEach(() => {
     user = userEvent.setup();
-    alertMock;
     render(<PlayerWrapper />);
   });
 
-  afterEach(() => {
-    alertMock.mockRestore();
-  });
   test("player input cannot be left blank", async () => {
-    const editButton = screen.getByRole("button", { name: "Edit" });
-    await user.click(editButton);
+    const editButton = screen.getAllByRole("button", { name: "Edit" });
+    await user.click(editButton[0]);
     const playerInput = screen.getByRole("textbox");
     await user.clear(playerInput);
     expect(playerInput).toHaveValue("");
     const saveButton = screen.getByRole("button", { name: "Save" });
     await user.click(saveButton);
-    expect(alertMock).toHaveBeenCalled();
+    expect(
+      screen.getByText("Player name can not be blank")
+    ).toBeInTheDocument();
+  });
+  test("player O cannot use same name as player X", async () => {
+    const editButtons = screen.getAllByRole("button", { name: "Edit" });
+    await user.click(editButtons[1]);
+    const input = screen.getByRole("textbox");
+    await user.clear(input);
+    await user.type(input, "Player 1");
+    await user.click(screen.getByRole("button", { name: "Save" }));
+    expect(screen.getByText("Player name must be unique")).toBeInTheDocument();
   });
   test("player name is editable and saves", async () => {
-    const editButton = screen.getByRole("button", { name: "Edit" });
-    await user.click(editButton);
+    const editButton = screen.getAllByRole("button", { name: "Edit" });
+    await user.click(editButton[0]);
     const playerInput = screen.getByRole("textbox");
     await user.clear(playerInput);
     await user.type(playerInput, "test");
     const saveButton = screen.getByRole("button", { name: "Save" });
     await user.click(saveButton);
-    expect(alertMock).not.toHaveBeenCalled();
     const newPlayerName = screen.getByText("test");
     expect(newPlayerName).toBeInTheDocument();
   });

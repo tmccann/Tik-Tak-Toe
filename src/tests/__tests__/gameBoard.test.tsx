@@ -11,7 +11,7 @@ describe("gameBoard component tests", () => {
     // turns bust be defined in each describe block to avoid all test using same values
     user = userEvent.setup();
     let mockBoard = deriveGameBoard([]);
-    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} />);
+    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} isValid />);
   });
 
   test("component renders with blank gameboard containing 9 buttons", () => {
@@ -36,7 +36,7 @@ describe("game board populate correctly", () => {
     let mockBoard = deriveGameBoard([
       { square: { rowIndex: 0, colIndex: 0 }, player: "X" },
     ]);
-    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} />);
+    render(<GameBoard board={mockBoard} handleTurn={mockHandleTurn} isValid />);
   });
   test("gameboard populates with correct symbol", () => {
     const buttons = screen.getAllByRole("button");

@@ -7,6 +7,7 @@ type PlayerProps = {
     e: React.ChangeEvent<HTMLInputElement>,
     symbol: "X" | "O"
   ) => void;
+  playerNameError: string | "";
   isActive: boolean;
 };
 
@@ -14,14 +15,17 @@ const Player = ({
   playerName,
   symbol,
   handleNameChange,
+  playerNameError,
   isActive,
 }: PlayerProps) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
-    playerName.length > 0
-      ? setIsEditing((prev) => !prev)
-      : alert("player name cannot be blank");
+    if (!playerNameError) {
+      setIsEditing((prev) => !prev);
+    } else {
+      return;
+    }
   };
 
   const player = !isEditing ? (
@@ -32,21 +36,32 @@ const Player = ({
       autoFocus
       name={`${playerName}`}
       onChange={(e) => handleNameChange(e, symbol)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          handleEdit();
+        }
+      }}
     />
   );
 
   return (
     <li className={isActive ? "active" : ""}>
-      <span className="player">
-        {player}
-        <span className="player-symbol">{symbol}</span>
-        <button
-          data-testid={`playerNameButton-${symbol}`}
-          onClick={() => handleEdit()}
-        >
-          {isEditing ? "Save" : "Edit"}
-        </button>
-      </span>
+      <div className="player-wrapper">
+        <span className="player">
+          {player}
+          <span className="player-symbol">{symbol}</span>
+          <button
+            type="button"
+            data-testid={`playerNameButton-${symbol}`}
+            onClick={handleEdit}
+          >
+            {isEditing ? "Save" : "Edit"}
+          </button>
+        </span>
+        {playerNameError && (
+          <div className="playerError">{playerNameError}</div>
+        )}
+      </div>
     </li>
   );
 };

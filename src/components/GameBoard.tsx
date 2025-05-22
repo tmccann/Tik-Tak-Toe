@@ -6,9 +6,10 @@ import { gameBoardMatrix } from "../types/game";
 type GameBoardProps = {
   board: gameBoardMatrix;
   handleTurn: (rowIndex: number, colIndex: number) => void;
+  isValid: boolean;
 };
 
-const GameBoard = ({ handleTurn, board }: GameBoardProps) => {
+const GameBoard = ({ handleTurn, board, isValid }: GameBoardProps) => {
   return (
     <ol id="game-board">
       {board.map((row, rowIndex) => (
@@ -20,6 +21,8 @@ const GameBoard = ({ handleTurn, board }: GameBoardProps) => {
                 onClick={() => {
                   handleTurn(rowIndex, colIndex);
                 }}
+                // !! turn value into bolean
+                disabled={!!symbol || !isValid}
               >
                 {symbol}
               </button>
