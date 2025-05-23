@@ -10,7 +10,7 @@ A simple and fun implementation of the classic **Tic-Tac-Toe** game, built with 
 - Turn-based logic with visual indicators
 - Win detection (horizontal, vertical, diagonal)
 - Draw detection (full board, no winner)
-- Game reset / play again functionalit
+- Game reset / play again functionality
 
 ---
 
