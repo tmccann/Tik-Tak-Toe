@@ -45,7 +45,7 @@ const Player = ({
   );
 
   return (
-    <li className={isActive ? "active" : ""}>
+    <li className={isActive ? "active" : ""} data-testid={`player-${symbol}`}>
       <div className="player-wrapper">
         <span className="player">
           {player}

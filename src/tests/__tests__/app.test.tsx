@@ -30,7 +30,17 @@ test("complete game flow: rename, play, win, draw, reset", async () => {
   // Step 2: Play game until Alfie wins
   // -----------------------------
   const squares = screen.getAllByTestId("square");
+  // -----------------------------
+  // Step 2.1: Check player X active
+  // -----------------------------
+  expect(screen.getByTestId("player-X")).toHaveClass("active");
+  expect(screen.getByTestId("player-O")).not.toHaveClass("active");
   await user.click(squares[0]); // X (Alfie)
+  // -----------------------------
+  // Step 2.2: Check player O active
+  // -----------------------------
+  expect(screen.getByTestId("player-O")).toHaveClass("active");
+  expect(screen.getByTestId("player-X")).not.toHaveClass("active");
   await user.click(squares[3]); // O (Bob)
   await user.click(squares[1]); // X (Alfie)
   await user.click(squares[4]); // O (Bob)
